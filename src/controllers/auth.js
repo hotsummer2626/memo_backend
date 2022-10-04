@@ -8,7 +8,7 @@ const login = async (req, res) => {
   const validPassword = await user.validatePassword(password);
   if (!validPassword) throw new Error("Username or password is wrong");
   const token = generateToken({ id: user._id });
-  return res.json({ token, username, id: user._id });
+  return res.json({ token, user: { username: user.username, id: user._id } });
 };
 
 module.exports = { login };

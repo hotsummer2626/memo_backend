@@ -11,6 +11,18 @@ const schema = new Schema({
     type: String,
     required: true,
   },
+  books: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      isReaded: {
+        type: Boolean,
+        required: true,
+      },
+    },
+  ],
 });
 
 schema.methods.hashPassword = async function () {
