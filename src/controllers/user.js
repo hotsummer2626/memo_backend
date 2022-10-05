@@ -21,12 +21,12 @@ const addUser = async (req, res) => {
 
 const addBookToUser = async (req, res) => {
   const { id } = req.params;
-  const { bookName } = req.body;
+  const { bookName, author, wordCount } = req.body;
   const user = await User.findById(id).exec();
   if (!user) throw new Error("User not existed");
   const book = await User.findOne({ "books.name": bookName }).exec();
   if (book) throw new Error("Book already existed");
-  const newBook = { name: bookName, isReaded: false };
+  const newBook = { name: bookName, isReaded: false, author, wordCount };
   user.books.addToSet(newBook);
   await user.save();
   return res.json(user.books.reverse());
@@ -34,10 +34,17 @@ const addBookToUser = async (req, res) => {
 
 const updateBookFromUser = async (req, res) => {
   const { userId, bookId } = req.params;
-  const { bookName, isReaded } = req.body;
+  const { bookName, isReaded, author, wordCount } = req.body;
   const user = await User.findOneAndUpdate(
     { _id: userId, "books._id": bookId },
-    { $set: { "books.$.name": bookName, "books.$.isReaded": isReaded } },
+    {
+      $set: {
+        "books.$.name": bookName,
+        "books.$.isReaded": isReaded,
+        "books.$.author": author,
+        "books.$.wordCount": wordCount,
+      },
+    },
     { new: true }
   ).exec();
   if (!user) throw new Error("User or book not existed");

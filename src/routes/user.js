@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/", addUser);
 router.get("/:id/books", authGuard, getBooksByUserId);
 router.post("/:id", authGuard, addBookToUser);
-router.put("/:userId/books/:bookId", updateBookFromUser);
+router.put("/:userId/books/:bookId", authGuard, updateBookFromUser);
 router.delete("/:userId/books/:bookId", authGuard, deleteBookFromUser);
 
 module.exports = router;

@@ -21,6 +21,14 @@ const schema = new Schema({
         type: Boolean,
         required: true,
       },
+      author: {
+        type: String,
+        required: true,
+      },
+      wordCount: {
+        type: Number,
+        required: true,
+      },
     },
   ],
 });
