@@ -32,18 +32,31 @@ const addBookToUser = async (req, res) => {
   return res.json(user.books.reverse());
 };
 
+const updateBookFromUser = async (req, res) => {
+  const { userId, bookId } = req.params;
+  const { bookName, isReaded } = req.body;
+  const user = await User.findOneAndUpdate(
+    { _id: userId, "books._id": bookId },
+    { $set: { "books.$.name": bookName, "books.$.isReaded": isReaded } },
+    { new: true }
+  ).exec();
+  if (!user) throw new Error("User or book not existed");
+  return res.sendStatus(204);
+};
+
 const deleteBookFromUser = async (req, res) => {
   const { userId, bookId } = req.params;
   const user = await User.findById(userId).exec();
   if (!user) throw new Error("User not existed");
   user.books.pull({ _id: bookId });
   await user.save();
-  return res.status(204).json("Delete success");
+  return res.sendStatus(204);
 };
 
 module.exports = {
   addUser,
   getBooksByUserId,
   addBookToUser,
+  updateBookFromUser,
   deleteBookFromUser,
 };
